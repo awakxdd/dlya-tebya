@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Для Маши ♡</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .screen {
+            position: absolute;
+            width: 100%;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            transform: scale(0.95);
+            z-index: 2;
+            padding: 20px 0;
+        }
+
+        .screen.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+        }
+
+        .hint {
+            text-align: center;
+            margin-bottom: 15px;
+            animation: bounce 1.8s infinite;
+        }
+
+        .hint-text {
+            font-size: 18px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #ff9ebb;
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.6);
+        }
+
+        .arrow {
+            font-size: 26px;
+            color: #ff4d88;
+            margin-top: 5px;
+            text-shadow: 0 0 12px #ff4d88;
+        }
+
+        .big-heart-container {
+            position: relative;
+            width: 300px;
+            height: 290px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .big-heart-container:hover, .big-heart-container:active {
+            transform: scale(1.06);
+        }
+
+        #heart-shape {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            animation: pulse 2.2s infinite ease-in-out;
+        }
+
+        .mini-heart {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            color: #ff4d88;
+            text-shadow: 0 0 8px #ff1a66, 0 0 16px #ff4d88;
+            user-select: none;
+            animation: glow 2s infinite alternate;
+        }
+
+        .heart-name {
+            position: absolute;
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: #ffb3cb;
+            text-shadow: 0 0 12px rgba(255, 77, 136, 0.9);
+            pointer-events: none;
+            margin-top: -10px;
+        }
+
+        .card {
+            background: rgba(18, 8, 11, 0.92);
+            border: 1px solid rgba(128, 0, 32, 0.7);
+            box-shadow: 0 0 35px rgba(128, 0, 32, 0.4);
+            border-radius: 20px;
+            padding: 30px 22px;
+            max-width: 560px;
+            width: 92%;
+            text-align: center;
+            backdrop-filter: blur(8px);
+        }
+
+        .card-deco {
+            font-size: 22px;
+            color: #9e1b32;
+            margin-bottom: 12px;
+            letter-spacing: 6px;
+        }
+
+        .card h1 {
+            font-size: 24px;
+            color: #a81c34;
+            margin-bottom: 18px;
+            text-shadow: 0 0 10px rgba(128, 0, 32, 0.5);
+        }
+
+        .message {
+            font-size: 16px;
+            line-height: 1.65;
+            color: #ffffff;
+            margin-bottom: 22px;
+            text-align: left;
+        }
+
+        .message p {
+            margin-bottom: 14px;
+        }
+
+        .message p:last-child {
+            margin-bottom: 0;
+        }
+
+        .bday-wish {
+            font-size: 18px;
+            font-weight: 600;
+            color: #a81c34;
+            text-shadow: 0 0 10px rgba(128, 0, 32, 0.5);
+            margin-bottom: 36px;
+        }
+
+        .back-btn {
+            background: transparent;
+            color: #b8253f;
+            border: 1px solid #800020;
+            padding: 10px 22px;
+            border-radius: 25px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover, .back-btn:active {
+            background: #800020;
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(128, 0, 32, 0.7);
+        }
+
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .bg-symbol {
+            position: absolute;
+            bottom: -30px;
+            color: rgba(255, 77, 136, 0.35);
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(8px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.04); }
+        }
+
+        @keyframes glow {
+            from { opacity: 0.75; }
+            to { opacity: 1; text-shadow: 0 0 12px #ff1a66, 0 0 22px #ff85ad; }
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.6; }
+            80% { opacity: 0.6; }
+            100% { transform: translateY(-105vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="floating-hearts" id="floatingHearts"></div>
+
+    <div id="screen-start" class="screen active">
+        <div class="hint">
+            <p class="hint-text">Нажми</p>
+            <div class="arrow">↓</div>
+        </div>
+
+        <div class="big-heart-container" id="heartBtn" title="Нажми на меня">
+            <div id="heart-shape"></div>
+            <span class="heart-name">Маше</span>
+        </div>
+    </div>
+
+    <div id="screen-card" class="screen">
+        <div class="card">
+            <div class="card-deco">✨ ♡ ✨</div>
+            <h1>С Днём Рождения, Маша!</h1>
+            
+            <div class="message">
+                <p>
+                    Привет, поздравляю тебя с твоим 17-ти летием. Я надеюсь ты проведёшь этот день с близкими тебе людьми и будешь весёлой. Я бы добавил какието фото, но было неудобно просить да и хотел сделать тебе сюрприз. Желаю тебе всего лучшего и чтобы мечты сбывались.
+                </p>
+                <p>
+                    Я понимаю что очень накосячил перед тобой и ты врядли захочешь общаться, но попрошу дать мне второй шанс в котором я стану лучше и не буду больше творить хуйни.
+                </p>
+            </div>
+
+            <div class="bday-wish">Радуйся этому дню мъэ ♡</div>
+
+            <button id="backBtn" class="back-btn">← Вернуться к сердцу</button>
+        </div>
+    </div>
+
+    <script>
+        const heartContainer = document.getElementById('heart-shape');
+        const totalHearts = 48;
+        const scale = window.innerWidth < 400 ? 7.5 : 8.5;
+
+        for (let i = 0; i < totalHearts; i++) {
+            const t = (Math.PI * 2 * i) / totalHearts;
+            const x = 16 * Math.pow(Math.sin(t), 3);
+            const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+
+            const miniHeart = document.createElement('span');
+            miniHeart.className = 'mini-heart';
+            miniHeart.innerText = '♡';
+            
+            miniHeart.style.left = `calc(50% + ${x * scale}px)`;
+            miniHeart.style.top = `calc(50% + ${y * scale}px)`;
+            miniHeart.style.animationDelay = `${i * 0.04}s`;
+
+            heartContainer.appendChild(miniHeart);
+        }
+
+        const bgContainer = document.getElementById('floatingHearts');
+        const symbols = ['♡', '✦', '♡', '·'];
+
+        for (let i = 0; i < 30; i++) {
+            const el = document.createElement('span');
+            el.className = 'bg-symbol';
+            el.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+            
+            const isLeft = Math.random() > 0.5;
+            el.style.left = isLeft ? `${Math.random() * 20}%` : `${80 + Math.random() * 20}%`;
+            el.style.animationDuration = `${6 + Math.random() * 8}s`;
+            el.style.animationDelay = `${Math.random() * 5}s`;
+            el.style.fontSize = `${12 + Math.random() * 14}px`;
+
+            bgContainer.appendChild(el);
+        }
+
+        const heartBtn = document.getElementById('heartBtn');
+        const backBtn = document.getElementById('backBtn');
+        const screenStart = document.getElementById('screen-start');
+        const screenCard = document.getElementById('screen-card');
+
+        heartBtn.addEventListener('click', () => {
+            screenStart.classList.remove('active');
+            setTimeout(() => {
+                screenCard.classList.add('active');
+            }, 300);
+        });
+
+        backBtn.addEventListener('click', () => {
+            screenCard.classList.remove('active');
+            setTimeout(() => {
+                screenStart.classList.add('active');
+            }, 300);
+        });
+    </script>
+</body>
+</html>
